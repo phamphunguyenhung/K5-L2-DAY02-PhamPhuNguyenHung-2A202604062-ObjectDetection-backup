@@ -10,19 +10,33 @@ from __future__ import annotations
 def yolo_line_to_pixels(line: str, width: int, height: int) -> list[float]:
     """'class xc yc w h' (chuẩn hóa 0..1) -> [x1, y1, x2, y2] theo điểm ảnh."""
     # TODO CP1: tách 5 số; nhân xc, w với width; yc, h với height; x1 = xc - w/2 ...
-    raise NotImplementedError("TODO CP1: yolo_line_to_pixels")
+    parts = line.split()
+    xc, yc, w, h = (float(v) for v in parts[1:])
+    return [
+        (xc - w / 2.0) * width,
+        (yc - h / 2.0) * height,
+        (xc + w / 2.0) * width,
+        (yc + h / 2.0) * height,
+    ]
 
 
 def coco_bbox_to_pixels(bbox: list[float]) -> list[float]:
     """COCO [x, y, w, h] (góc trên-trái, điểm ảnh) -> [x1, y1, x2, y2]."""
     # TODO CP1: x2 = x + w, y2 = y + h
-    raise NotImplementedError("TODO CP1: coco_bbox_to_pixels")
+    x, y, w, h = (float(v) for v in bbox)
+    return [x, y, x + w, y + h]
 
 
 def box_iou(a: list[float], b: list[float]) -> float:
     """IoU = diện tích giao / diện tích hợp của hai hộp [x1, y1, x2, y2]."""
     # TODO CP1: giao = max(0, min(x2) - max(x1)) * max(0, min(y2) - max(y1)); hợp = A + B - giao
-    raise NotImplementedError("TODO CP1: box_iou")
+    ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+    iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+    inter = ix * iy
+    area_a = max(0.0, a[2] - a[0]) * max(0.0, a[3] - a[1])
+    area_b = max(0.0, b[2] - b[0]) * max(0.0, b[3] - b[1])
+    union = area_a + area_b - inter
+    return inter / union if union > 0 else 0.0
 
 
 def _check() -> int:
