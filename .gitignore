@@ -1,0 +1,9 @@
+day2-reference.zip
+day2-reference/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+runs/
+*.pt
+.DS_Store
