@@ -66,7 +66,7 @@
     - Dòng YOLO trong `exports/yolo-v1.zip`: `0 0.493914 0.475062 0.097328 0.169094` ➔ Đổi ra `xyxy`: `[284.96, 249.93, 347.25, 358.15]`.
     - Dòng COCO `bbox` trong `exports/coco-v1.zip`: `[284.96, 249.93, 62.29, 108.22]` ➔ Đổi ra `xyxy`: `[284.96, 249.93, 347.25, 358.15]`.
     - Hai kết quả trùng khớp hoàn toàn (chênh lệch tọa độ < 0.0003 px).
-- Commit khóa v1 (hash): COMMIT_LOCK_V1_HASH
+- Commit khóa v1 (hash): `8c1f338`
 - Vì sao phải nộp cả COCO và YOLO (1–2 câu): Định dạng YOLO tối ưu để đưa thẳng vào huấn luyện mô hình nhưng bị lược bỏ hoàn toàn các thuộc tính mở rộng (`occluded`, `truncated`). Bản xuất COCO lưu tọa độ tuyệt đối và bảo tồn đầy đủ các trường `attributes` (`occluded`, `truncated`), giúp hệ thống có thể audit chất lượng, lọc ca khó và duy trì tính toàn vẹn của dữ liệu gốc.
 
 ## 5. CP4 — So với tham chiếu và sửa (C4)
