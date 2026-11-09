@@ -1,0 +1,58 @@
+{
+  "status": "pass",
+  "errors": [],
+  "warnings": [
+    "drive_008: hộp annotations/instances_default.json#13 chạm mép ảnh nhưng truncated=false — kiểm tra lại",
+    "drive_038: hộp annotations/instances_default.json#65 chạm mép ảnh nhưng truncated=false — kiểm tra lại",
+    "drive_038: hộp annotations/instances_default.json#73 chạm mép ảnh nhưng truncated=false — kiểm tra lại",
+    "drive_038: hộp annotations/instances_default.json#89 chạm mép ảnh nhưng truncated=false — kiểm tra lại",
+    "drive_038: hộp annotations/instances_default.json#93 chạm mép ảnh nhưng truncated=false — kiểm tra lại"
+  ],
+  "per_image": [
+    {
+      "image_id": "drive_008",
+      "boxes": 28,
+      "occluded": 13,
+      "truncated": 3,
+      "car": 21,
+      "truck": 1,
+      "bus": 3,
+      "van": 3
+    },
+    {
+      "image_id": "drive_022",
+      "boxes": 5,
+      "occluded": 2,
+      "truncated": 0,
+      "car": 3,
+      "truck": 1,
+      "bus": 1,
+      "van": 0
+    },
+    {
+      "image_id": "drive_033",
+      "boxes": 30,
+      "occluded": 5,
+      "truncated": 5,
+      "car": 27,
+      "truck": 1,
+      "bus": 2,
+      "van": 0
+    },
+    {
+      "image_id": "drive_038",
+      "boxes": 38,
+      "occluded": 17,
+      "truncated": 6,
+      "car": 28,
+      "truck": 3,
+      "bus": 4,
+      "van": 3
+    }
+  ],
+  "total_boxes": 101,
+  "lock": {
+    "coco-v1.zip": "68bd7ae293e1edab8d174fabc565134835cd3ed7f81330f093b3c20680ce414c",
+    "yolo-v1.zip": "6d597f0b95db9b1003233c2c35a85859bbe07e14a891c5699ed18278a2a9f7d9"
+  }
+}

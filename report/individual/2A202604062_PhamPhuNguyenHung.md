@@ -51,21 +51,23 @@
 
 ## 3. CP2 — Gán nhãn (C2)
 
-> Tình huống khó là chỗ bạn phải chọn giữa hai cách gán. Ghi đủ 4 ý: ảnh, vị trí box, bạn chọn gì, quy tắc nào
-> trong `docs/label-rules.md`.
-
-- Tổng số box: ... (`occluded`: ..., `truncated`: ...)
-- Tình huống khó 1 (ảnh, vị trí, quyết định, quy tắc dùng): ...
-- Tình huống khó 2: ...
+- Tổng số box: 101 (`occluded`: 37, `truncated`: 14).
+- Tình huống khó 1 (ảnh, vị trí, quyết định, quy tắc dùng): Ảnh `drive_033`, chiếc xe tải màu trắng ở trung tâm có cabin và khoang chở hàng dạng thùng kín phía sau: phân vân giữa `truck` hay `van`. Quyết định chọn nhãn `truck` theo quy tắc phân lớp ("có thùng/ben hoặc khoang chở hàng riêng biệt phía sau; van là xe dạng thân hộp kín liền khối một thể").
+- Tình huống khó 2: Ảnh `drive_033`, chiếc xe buýt màu đỏ góc dưới bên trái bị cắt ngang bởi mép dưới và mép trái của ảnh: phân vân có nên vẽ phần bị khuất ngoài ảnh không. Quyết định gán nhãn `bus`, chỉ vẽ bao quanh đúng phần nhìn thấy trong ảnh và tích thuộc tính `truncated = true` theo quy tắc ("Sát mép phần nhìn thấy của xe, không đoán phần bị che khuất; xe chạm mép ảnh vẫn gán nếu đủ bằng chứng phân lớp, box dừng ở mép ảnh").
 
 ## 4. CP3 — Xuất và kiểm tra (C3)
 
-- `audit` v1: PASS / FAIL — số lần xuất lại: ...
-- Lỗi/cảnh báo đã gặp và cách xử lý (ghi nguyên dòng `LỖI`/`CẢNH BÁO`, rồi bạn sửa hay giữ): ...
-- Đối chiếu 1 xe: dòng YOLO trong `exports/yolo-v1.zip` và `bbox` trong `exports/coco-v1.zip`, cả hai đổi ra
-  `[x1, y1, x2, y2]`: ...
-- Commit khóa v1 (hash): ...
-- Vì sao phải nộp cả COCO và YOLO (1–2 câu): ...
+- `audit` v1: PASS — 101 hộp — số lần xuất lại: 2 lần (lần 1 bị thiếu nhãn ảnh `drive_038` do chưa save, lần 2 xuất lại đạt PASS trọn vẹn 101 hộp trên cả 4 ảnh).
+- Lỗi/cảnh báo đã gặp và cách xử lý:
+  - Lỗi: `LỖI drive_038: thiếu tệp nhãn trong bản YOLO` ➔ Cách xử lý: mở lại job trên CVAT, hoàn thành gán nhãn cho ảnh `drive_038`, bấm Save và xuất lại dataset.
+  - Cảnh báo: `CẢNH BÁO drive_008 (#13), drive_038 (#65, #73, #89, #93): chạm mép ảnh nhưng truncated=false` ➔ Cách xử lý: các hộp này có tọa độ float sát mép (sai số < 1px do làm tròn hoặc gần viền) nhưng thân xe quan sát thực tế vẫn nguyên vẹn không bị cắt cụt khỏi khung hình, nên quyết định giữ nguyên để bảo toàn ranh giới nhìn thấy tự nhiên.
+- Đối chiếu 1 xe: 
+  - Xe `car` đầu tiên trong `drive_008`:
+    - Dòng YOLO trong `exports/yolo-v1.zip`: `0 0.493914 0.475062 0.097328 0.169094` ➔ Đổi ra `xyxy`: `[284.96, 249.93, 347.25, 358.15]`.
+    - Dòng COCO `bbox` trong `exports/coco-v1.zip`: `[284.96, 249.93, 62.29, 108.22]` ➔ Đổi ra `xyxy`: `[284.96, 249.93, 347.25, 358.15]`.
+    - Hai kết quả trùng khớp hoàn toàn (chênh lệch tọa độ < 0.0003 px).
+- Commit khóa v1 (hash): COMMIT_LOCK_V1_HASH
+- Vì sao phải nộp cả COCO và YOLO (1–2 câu): Định dạng YOLO tối ưu để đưa thẳng vào huấn luyện mô hình nhưng bị lược bỏ hoàn toàn các thuộc tính mở rộng (`occluded`, `truncated`). Bản xuất COCO lưu tọa độ tuyệt đối và bảo tồn đầy đủ các trường `attributes` (`occluded`, `truncated`), giúp hệ thống có thể audit chất lượng, lọc ca khó và duy trì tính toàn vẹn của dữ liệu gốc.
 
 ## 5. CP4 — So với tham chiếu và sửa (C4)
 
